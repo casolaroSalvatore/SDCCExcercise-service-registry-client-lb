@@ -107,6 +107,7 @@ In the client terminal, you can observe requests being distributed alternately a
 2026/01/07 20:08:45  -> Result from localhost:9002: 9 + 18 = 27
 This confirms that Client-Side Load Balancing (Round-Robin) is working correctly using the cached list.
 
+```
 <a name="versione-italiana"></a>
 # 🇮🇹 Progetto 1: Service Registry & Client-Side Load Balancing (Versione Locale)
 

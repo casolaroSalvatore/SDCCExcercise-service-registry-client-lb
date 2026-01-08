@@ -105,9 +105,11 @@ In the client terminal, you can observe requests being distributed alternately a
 ...
 2026/01/07 20:08:45 [Request 10] Selected Server: localhost:9002
 2026/01/07 20:08:45  -> Result from localhost:9002: 9 + 18 = 27
-This confirms that Client-Side Load Balancing (Round-Robin) is working correctly using the cached list.
 
 ```
+This confirms that Client-Side Load Balancing (Round-Robin) is working correctly using the cached list.
+
+
 <a name="versione-italiana"></a>
 # IT Progetto 1: Service Registry & Client-Side Load Balancing (Versione Locale)
 
@@ -204,6 +206,7 @@ Nel terminale del client si può osservare che le richieste vengono smistate alt
 ...
 2026/01/07 20:08:45 [Request 10] Selected Server: localhost:9002
 2026/01/07 20:08:45  -> Result from localhost:9002: 9 + 18 = 27
+```
 
 Questo conferma che il Client-Side Load Balancing (Round-Robin) sta funzionando correttamente utilizzando la lista salvata in cache.
-```
+

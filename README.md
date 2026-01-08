@@ -48,9 +48,11 @@ Since the execution is local and manual (no virtualization via Docker provided),
 
     This starts the service registry, listening on port 8000.
     *Expected output:*
+    ```text
     `2026/01/07 20:05:28 [Registry] Service Registry running on port :8000`
+    ```
 
-2.  Now open two (or more) new terminals to simulate different servers. In this case, we use 2 servers.
+3.  Now open two (or more) new terminals to simulate different servers. In this case, we use 2 servers.
 
     **Terminal 2 (Server A):**
     Run:
@@ -64,7 +66,7 @@ Since the execution is local and manual (no virtualization via Docker provided),
     2026/01/07 20:06:48 [Server] Server running on localhost:9001. Waiting for requests...
     ```
 
-3.  **Terminal 3 (Server B):**
+4.  **Terminal 3 (Server B):**
     Run:
     ```bash
     go run server/main.go -port 9002
@@ -82,7 +84,7 @@ Since the execution is local and manual (no virtualization via Docker provided),
     2026/01/07 20:07:05 [Registry] Server registered: localhost:9002
     ```
 
-4.  **Terminal 4 (Client):**
+5.  **Terminal 4 (Client):**
     Open a final terminal to simulate the client and run:
 
     ```bash
@@ -149,9 +151,11 @@ Poiché l'esecuzione è locale e manuale (non abbiamo virtualizzazione fornita d
 
     Così facendo avviamo il service registry, che rimane in ascolto sulla porta 8000.
     *Output atteso:*
+    ```text
     `2026/01/07 20:05:28 [Registry] Service Registry running on port :8000`
-
-2.  Aprire ora due (o più) nuovi terminali per simulare due (o più) server diversi. In questo caso utilizziamo 2 server.
+    ```
+    
+3.  Aprire ora due (o più) nuovi terminali per simulare due (o più) server diversi. In questo caso utilizziamo 2 server.
 
     **Terminale 2 (Server A):**
     Eseguire:
@@ -165,7 +169,7 @@ Poiché l'esecuzione è locale e manuale (non abbiamo virtualizzazione fornita d
     2026/01/07 20:06:48 [Server] Server running on localhost:9001. Waiting for requests...
     ```
 
-3.  **Terminale 3 (Server B):**
+4.  **Terminale 3 (Server B):**
     Eseguire:
     ```bash
     go run server/main.go -port 9002
@@ -183,7 +187,7 @@ Poiché l'esecuzione è locale e manuale (non abbiamo virtualizzazione fornita d
     2026/01/07 20:07:05 [Registry] Server registered: localhost:9002
     ```
 
-4.  **Terminale 4 (Client):**
+5.  **Terminale 4 (Client):**
     Aprire ora un ultimo terminale per simulare il client ed eseguire:
 
     ```bash

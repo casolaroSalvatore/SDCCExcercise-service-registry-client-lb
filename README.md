@@ -1,6 +1,16 @@
-# service-registry-client-lb
+<div align="center">
 
-# Project 1: Service Registry & Client-Side Load Balancing (Local Version)
+# Service Registry & Client-Side Load Balancing
+### Distributed System Project in Go
+
+[**🇬🇧 Read in English**](#english-version) | [**🇮🇹 Leggi in Italiano**](#versione-italiana)
+
+</div>
+
+---
+
+<a name="english-version"></a>
+# 🇬🇧 Project 1: Service Registry & Client-Side Load Balancing (Local Version)
 
 This project implements a distributed system in Go composed of a Service Registry, multiple RPC Servers, and a Client performing Load Balancing.
 
@@ -79,7 +89,7 @@ Since the execution is local and manual (no virtualization via Docker provided),
     go run client/main.go
     ```
 
-### 3. Result 
+### 3. Result
 In the client terminal, you can observe requests being distributed alternately among the servers.
 
 *Expected output:*
@@ -97,7 +107,8 @@ In the client terminal, you can observe requests being distributed alternately a
 2026/01/07 20:08:45  -> Result from localhost:9002: 9 + 18 = 27
 This confirms that Client-Side Load Balancing (Round-Robin) is working correctly using the cached list.
 
-# Progetto 1: Service Registry & Client-Side Load Balancing (Versione Locale)
+<a name="versione-italiana"></a>
+# 🇮🇹 Progetto 1: Service Registry & Client-Side Load Balancing (Versione Locale)
 
 Questo progetto implementa un sistema distribuito in Go composto da un Service Registry, Server multipli (RPC) e un Client che effettua il bilanciamento del carico (Load Balancing).
 
@@ -192,5 +203,3 @@ Nel terminale del client si può osservare che le richieste vengono smistate alt
 ...
 2026/01/07 20:08:45 [Request 10] Selected Server: localhost:9002
 2026/01/07 20:08:45  -> Result from localhost:9002: 9 + 18 = 27
-
-Questo conferma che il Client-Side Load Balancing (Round-Robin) sta funzionando correttamente utilizzando la lista salvata in cache.

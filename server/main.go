@@ -15,17 +15,66 @@ import (
 	"syscall"
 )
 
-// MathService provides basic arithmetic operations.
-type MathService struct{}
+const (
+	registryAddr = "localhost:8000"
+	dbAddr = "localhost:8001"
+)
+
+// 1. STATELESS SERVICE: Sum
+
+// StatelessMath provides stateless arithmetic operations
+type StatelessMath struct{}
 
 // Sum performs addition of two integers.
-func (m *MathService) Sum(args *common.Args, reply *int) error {
+func (m *StatelessMath) Sum(args *common.SumArgs, reply *int) error {
 	log.Printf("[Server] Received request: %d + %d", args.A, args.B)
 	*reply = args.A + args.B
 	return nil
 }
 
-const registryAddr = "localhost:8000"
+// 2. STATEFUL SERVICE: Multiplication (
+
+// StatefulMath provides stateful arithmetic operations
+type StatefulMath struct{}
+
+// Multiply takes a factor from the client, reads the current state from the DB, multiplies them, and saves the new state back to the DB.
+func (s *StatefulMath) Multiply(args *common.MulArgs, reply *int) error {
+	
+	// Connect to the external Database
+	client, err := rpc.DialHTTP("tcp", dbAddr)
+	if err != nil {
+		log.Printf("[Server] Error connecting to DB: %v", err)
+		return err
+	}
+	defer client.Close()
+
+	// Read current state from DB. It is used a fixed key "running_product" to simulate a shared global calculation
+	key := "running_product"
+	var currentVal int
+	err = client.Call("KVStore.Get", &common.KeyArgs{Key: key}, &currentVal)
+	if err != nil {
+		return err
+	}
+
+	// If DB is empty (0), we start with 1 to allow multiplication
+	if currentVal == 0 {
+		currentVal = 1
+	}
+
+	// Compute new state
+	newVal := currentVal * args.Factor
+
+	// Write new state back to DB
+	var setReply bool
+	err = client.Call("KVStore.Set", &common.KeyValueArgs{Key: key, Value: newVal}, &setReply)
+	if err != nil {
+		return err
+	}
+
+	*reply = newVal
+	log.Printf("[Server] Multiply: Old(%d) * Factor(%d) = New(%d)", currentVal, args.Factor, newVal)
+	return nil
+}
 
 func main() {
 
@@ -33,8 +82,9 @@ func main() {
 	flag.Parse()
 	myAddr := "localhost:" + *p
 
-	// Setup RPC Service
-	rpc.Register(new(MathService))
+	// Register both services
+	rpc.Register(new(StatelessMath))
+	rpc.Register(new(StatefulMath))
 	rpc.HandleHTTP()
 
 	listener, err := net.Listen("tcp", ":"+*p)

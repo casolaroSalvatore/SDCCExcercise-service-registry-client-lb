@@ -109,3 +109,71 @@ Once the client is started, an interactive menu will be observed:
 2. Execute Stateful Multiplication (GlobalAccumulator * Factor)
 3. Exit
 [Client] Select an option:
+```
+
+### Scenario A: Stateless Test (Sum)
+By selecting option **1**, the client prompts the user to enter two values in order to execute the sum operation.
+
+```text
+[Client] [Stateless Operation Selected]
+Enter value for A:
+Enter value for B:
+```
+
+Once the values are entered (e.g., A = 1 and B = 1), the sum result is returned by Server A:
+
+```bash
+2026/01/17 20:11:01 [Client] [Request 1] Routing to Server: localhost:9001
+2026/01/17 20:11:01 [Client] Sum Result: 1 + 1 = 2
+```
+
+By executing the sum operation again (still with A = 1 and B = 1), it can be observed that the request is now handled by Server B:
+
+```bash
+2026/01/17 20:14:05 [Client] [Request 2] Routing to Server: localhost:9002
+2026/01/17 20:14:05 [Client] Sum Result: 1 + 1 = 2
+```
+
+Therefore, requests are alternately routed to Server A and Server B according to the Round-Robin strategy, while the computation remains local and isolated for each request.
+
+### Scenario B: Stateful Test (Multiplication)
+By selecting option **2**, the user can enter a multiplication factor. The system maintains a Global Accumulator, initially set to 1.
+
+```bash
+[Client] [Stateful Operation Selected]
+Enter Factor to multiply by:
+```
+
+After entering a multiplication factor (e.g., Factor = 2), the multiplication result is returned by Server A:
+
+```bash
+2026/01/17 20:15:32 [Client] [Request 3] Routing to Server: localhost:9001
+2026/01/17 20:15:32 [Client] Global Accumulator: * 2 = 2
+```
+
+By executing the multiplication again (still with Factor = 2), the request is handled by Server B, which reads the global accumulator value from the external database
+(in this case, Global Accumulator = 2) and performs the multiplication starting from that value:
+
+```bash
+2026/01/17 20:19:06 [Client] [Request 4] Routing to Server: localhost:9002
+2026/01/17 20:19:06 [Client] Global Accumulator: * 2 = 4
+```
+
+This confirms that the accumulator state is shared and preserved across different servers through the external Key-Value Store.
+
+### Scenario C: Deregistration Verification (Shutdown)
+To verify the automatic deregistration requirement:
+
+1. Go to the terminal of Server A.
+2. Press **CTRL+C**
+3. Observe the output on the Registry terminal:
+
+```bash
+2026/01/17 20:20:27 [Server] Shutting down...
+2026/01/17 20:20:27 [Server] Successfully deregistered from Registry
+```
+
+This confirms that servers correctly deregister from the Service Registry upon shutdown.
+
+
+

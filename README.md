@@ -2,8 +2,7 @@
 
 ---
 
-<a name="english-version"></a>
-# Exercise: Service Registry & Client-Side Load Balancing (Local Version)
+# Exercise: Service Registry & Client-Side Load Balancing
 
 This project implements a distributed system in Go that demonstrates the use of RPC, Service Discovery, Client-Side Load Balancing, and distributed state management via an external Key-Value Store.
 

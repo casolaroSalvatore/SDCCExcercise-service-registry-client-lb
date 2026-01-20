@@ -22,7 +22,7 @@ The system adheres to the following requirements:
 The system is structured into the following components:
 - **common/types.go**: Shared data structures for the RPC protocol (arguments for sum, multiplication, and database).
 - **registry/main.go**: The central registry server, which manages the address map.
-- **database/main.go**: The in-memory Key-Value Store (Persistence).
+- **database/main.go**: The in-memory Key-Value Store.
 - **server/main.go**: The node offering the calculation service.
 - **client/main.go**: The client acting as the load balancer.
 

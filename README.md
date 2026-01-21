@@ -1,15 +1,15 @@
 # Service Registry & Client-Side Load Balancing
 
-This project implements a distributed system in Go that demonstrates the use of RPC, Service Discovery, Client-Side Load Balancing, and distributed state management via an external Key-Value Store.
+This project implements a distributed system in Go that demonstrates the use of **RPC**, **Service Discovery**, **Client-Side Load Balancing**, and **distributed state management** via an external Key-Value Store.
 
 ## System Specification
-The system adheres to the following requirements:
-1.  **Service Registry:** Maintains a dynamic list of active server addresses.
-2.  **RPC Server:** Offers two types of services:
-    - **Stateless:** Sum service (Sum), where the result depends only on the inputs.
-    - **Stateful:** Multiplication service with an accumulator (Multiply), where the state is kept consistent across replicas thanks to the external Database.
-3.  **External Database (KVStore):** A separate component acting as shared memory to guarantee data persistence between replicas.
-4.  **Interactive Client:** Features the following characteristics:
+The system architecture consists of:
+1.  **Service Registry:** A central server that maintains a dynamic list of active worker nodes.
+2.  **RPC Server:** Nodes that perform calculations. They offer two services:
+    - **Stateless:** Sum.
+    - **Stateful:** Multiplication with a global accumulator (stored externally).
+3.  **External Database (KVStore):** An in-memory Key-Value store acting as shared memory to keep state consistent across server replicas.
+4.  **Client:** Features the following characteristics:
     - **Caching:** Downloads the server list from the Registry only once at the beginning of the session.
     - **Load Balancing:** Uses a Round-Robin algorithm to distribute requests among servers.
     - **Interface:** Offers a command-line menu to choose which service to invoke.
@@ -17,7 +17,7 @@ The system adheres to the following requirements:
 ## File Architecture
 The system is structured into the following components:
 - **common/types.go**: Shared data structures for the RPC protocol (arguments for sum, multiplication, and database).
-- **registry/main.go**: The central registry server, which manages the address map.
+- **registry/main.go**: The Service Discovery server, which manages the address map.
 - **database/main.go**: The in-memory Key-Value Store.
 - **server/main.go**: The node offering the calculation service.
 - **client/main.go**: The client acting as the load balancer.
@@ -57,7 +57,7 @@ Since the execution is local and manual (no virtualization provided by Docker is
     2026/01/17 20:06:34 [Database] Shared Memory running on port :8001
     ```
 
-3.  Now open two (or more) new terminals to simulate different servers. In this case, we use 2 servers.
+3.  Now open two (or more) new terminals to simulate different servers. In this simple case, we use 2 servers.
 
     **Terminal 3 (Server A):**
     Run:
@@ -97,7 +97,7 @@ Since the execution is local and manual (no virtualization provided by Docker is
     ```
 
 ### 3. Result
-Once the client is started, an interactive menu will be observed:
+Once the client is started, you will see this menu:
 
 ```text
 --- Client MENU ---
@@ -160,16 +160,26 @@ This confirms that the accumulator state is shared and preserved across differen
 ### Scenario C: Deregistration Verification (Shutdown)
 To verify the automatic deregistration requirement:
 
-1. Go to the terminal of Server A.
-2. Press **CTRL+C**
-3. Observe the output on the Registry terminal:
+1. Go to the terminal of Server A and press **CTRL+C**
+2. The server A logs:
 
 ```bash
-2026/01/17 20:20:27 [Server] Shutting down...
-2026/01/17 20:20:27 [Server] Successfully deregistered from Registry
+2026/01/21 15:43:43 [Server] Shutting down...
+2026/01/21 15:43:43 [Server] Successfully deregistered from Registry
 ```
 
+3. The service registry logs:
+
+```bash
+2026/01/21 15:43:42 [Registry] Server registered: localhost:9001
+2026/01/21 15:43:43 [Registry] Server deregistered: localhost:9001
+```
 This confirms that servers correctly deregister from the Service Registry upon shutdown.
+
+4. In the Client, try to run an operation. Since the client caches the list, it might try to contact the dead server.
+
+5. The client will detect the error (connection refused), and you can proceed to the next request which will be routed to the remaining active server.
+
 
 
 

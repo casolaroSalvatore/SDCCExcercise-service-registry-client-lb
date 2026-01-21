@@ -26,7 +26,7 @@ The system is structured into the following components:
 Since the execution is local and manual (no virtualization provided by Docker is used), it is necessary to open at least 5 separate terminals.
 
 ### 1. Prerequisites
-- Go installed (`go version`).
+- Go installed.
 - Module initialized: Run `go mod init service-registry-client-lb` and `go mod tidy` in the root folder.
 
 ### 2. Steps to Run

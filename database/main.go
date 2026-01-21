@@ -1,3 +1,5 @@
+// Simple KVStore to handle shared state across multiple servers
+
 package main
 
 import (
@@ -9,13 +11,13 @@ import (
 	"sync"
 )
 
-// KVStore represents the in-memory database shared across all servers.
+// Represents the in-memory database shared across all servers
 type KVStore struct {
 	mu sync.Mutex
 	store map[string]int
 }
 
-// Set saves a value into the database associated with a specific key
+// Saves a value into the database associated with a specific key
 func (k *KVStore) Set(args *common.KeyValueArgs, reply *bool) error {
 	k.mu.Lock()
 	defer k.mu.Unlock()
@@ -25,14 +27,13 @@ func (k *KVStore) Set(args *common.KeyValueArgs, reply *bool) error {
 	return nil
 }
 
-// Get retrieves a value from the database.
+// Retrieves a value from the database.
 func (k *KVStore) Get(args *common.KeyArgs, reply *int) error {
 	k.mu.Lock()
 	defer k.mu.Unlock()
 	val, ok := k.store[args.Key]
 	if !ok {
-		// Default to 0 if not found. 
-		// The server logic will handle converting 0 to 1 for multiplication.
+		// Default to 0 if not found. The server will convert 0 to 1 for multiplication
 		*reply = 0
 	} else {
 		*reply = val
@@ -42,6 +43,7 @@ func (k *KVStore) Get(args *common.KeyArgs, reply *int) error {
 }
 
 func main() {
+
 	// Initialize the store map
 	db := &KVStore{
 		store: make(map[string]int),
@@ -50,7 +52,7 @@ func main() {
 	rpc.Register(db)
 	rpc.HandleHTTP()
 
-	// The Database listens on a fixed port (8001) known to the Worker Servers
+	// The database listens on a fixed port known to the Worker Servers
 	port := ":8001"
 	listener, err := net.Listen("tcp", port)
 	if err != nil {

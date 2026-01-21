@@ -1,5 +1,5 @@
-// The client performs the lookup only once at startup (caching requirement),
-// then executes a request loop distributing the load in a round-robin strategy.
+// The client performs the lookup only once at startup (caching),
+// then executes a request loop distributing the load in a round-robin strategy
 
 package main
 
@@ -29,10 +29,12 @@ func getServers() []string {
 	if err != nil {
 		log.Fatalf("[Client] Error fetching providers: %v", err)
 	}
+	
+	// List of servers
 	return list.Servers
 }
 
-// callSum invokes the StatelessMath.Sum method
+// Invokes the Sum method
 func callSum(address string, a, b int) {
 	client, err := rpc.DialHTTP("tcp", address)
 	if err != nil {
@@ -53,7 +55,7 @@ func callSum(address string, a, b int) {
 	log.Printf("[Client] Sum Result: %d + %d = %d", a, b, reply)
 }
 
-// callMultiply invokes the StatefulMath.Multiply method
+// Invokes the Multiply method
 func callMultiply(address string, factor int) {
 	client, err := rpc.DialHTTP("tcp", address)
 	if err != nil {
@@ -76,7 +78,7 @@ func callMultiply(address string, factor int) {
 
 func main() {
 
-	// Get servers once (caching requirement)
+	// Get servers once 
 	servers := getServers()
 
 	if len(servers) == 0 {
@@ -85,12 +87,12 @@ func main() {
 
 	log.Printf("[Client] Found servers: %v", servers)
 	log.Println("Starting session. Type 'exit' to quit.")
-	log.Println("---------------------------------------------------------")
 
+	// Read inpuut
 	reader := bufio.NewReader(os.Stdin)
 	
 	// Counter to handle Round Robin
-	requestCount := 0 
+	requestCount := 0
 
 	for {
 		fmt.Println("\n--- Client MENU ---")

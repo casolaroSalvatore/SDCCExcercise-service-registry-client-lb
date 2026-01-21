@@ -1,5 +1,4 @@
-// The registry maintains a list of addresses in memory,
-// protected by a mutex to handle concurrency.
+// The registry maintains a list of addresses in memory, protected by a mutex to handle concurrency
 
 package main
 
@@ -12,15 +11,13 @@ import (
 	"sync"
 )
 
-// Registry handles the list of active servers.
+// Handles the list of active servers.
 type Registry struct {
 	mu sync.Mutex
-	
-	// Using a map for addition/deletion of the servers.
-	servers map[string]bool 
+	servers map[string]bool
 }
 
-// Register adds a server to the registry.
+// Adds a server to the registry
 func (r *Registry) Register(args *common.RegistryArgs, reply *bool) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -38,7 +35,7 @@ func (r *Registry) Register(args *common.RegistryArgs, reply *bool) error {
 	return nil
 }
 
-// Deregister removes a server from the registry.
+// Removes a server from the registry
 func (r *Registry) Deregister(args *common.RegistryArgs, reply *bool) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -56,14 +53,13 @@ func (r *Registry) Deregister(args *common.RegistryArgs, reply *bool) error {
 	return nil
 }
 
-// GetProviders returns the list of active servers.
+// Returns the list of active servers
 func (r *Registry) GetProviders(args *struct{}, reply *common.ServiceList) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	log.Println("[Registry] Client requested server list")
 	
-	// Return slice of active servers
 	list := make([]string, 0, len(r.servers))
 	for addr := range r.servers {
 		list = append(list, addr)
@@ -73,6 +69,8 @@ func (r *Registry) GetProviders(args *struct{}, reply *common.ServiceList) error
 }
 
 func main() {
+
+	// Initialize the registy
 	registry := &Registry{
 		servers: make(map[string]bool),
 	}
@@ -84,7 +82,7 @@ func main() {
 	rpc.HandleHTTP()
 
 	// Registry runs on fixed port 8000
-	port := ":8000" 
+	port := ":8000"
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal("[Registry] Listener error:", err)

@@ -1,5 +1,5 @@
-// The server implements a simple addition service. On startup, it registers itself with the Registry.
-// It uses os.Signal to intercept CTRL+C and deregister before shutting down.
+// The server implements a simple addition service and multiplication service.
+// On startup, it registers itself with the Registry and CTRL+C to deregister before shutting down
 
 package main
 
@@ -20,27 +20,26 @@ const (
 	dbAddr = "localhost:8001"
 )
 
-// 1. STATELESS SERVICE: Sum
+// Stateless Service (Sum)
 
-// StatelessMath provides stateless arithmetic operations
+// Provides stateless arithmetic operations (for now only Sum)
 type StatelessMath struct{}
 
-// Sum performs addition of two integers.
 func (m *StatelessMath) Sum(args *common.SumArgs, reply *int) error {
 	log.Printf("[Server] Received request: %d + %d", args.A, args.B)
 	*reply = args.A + args.B
 	return nil
 }
 
-// 2. STATEFUL SERVICE: Multiplication (
+// Stateful Service (Multiplication)
 
-// StatefulMath provides stateful arithmetic operations
+// Provides stateful arithmetic operations (for now only Multiplication)
 type StatefulMath struct{}
 
-// Multiply takes a factor from the client, reads the current state from the DB, multiplies them, and saves the new state back to the DB.
+// Multiply takes a factor from the client, reads the current state from the DB, multiplies them, and saves the new state in the DB
 func (s *StatefulMath) Multiply(args *common.MulArgs, reply *int) error {
 	
-	// Connect to the external Database
+	// Connect to the database
 	client, err := rpc.DialHTTP("tcp", dbAddr)
 	if err != nil {
 		log.Printf("[Server] Error connecting to DB: %v", err)
@@ -61,7 +60,6 @@ func (s *StatefulMath) Multiply(args *common.MulArgs, reply *int) error {
 		currentVal = 1
 	}
 
-	// Compute new state
 	newVal := currentVal * args.Factor
 
 	// Write new state back to DB
@@ -92,7 +90,7 @@ func main() {
 		log.Fatalf("[Server] Error listening on port %s: %v", *p, err)
 	}
 
-	// Register to Service Registry
+	// Register to service registry
 	register(myAddr)
 
 	// Catch CTRL+C to deregister

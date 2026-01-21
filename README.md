@@ -107,7 +107,7 @@ Once the client is started, you will see this menu:
 [Client] Select an option:
 ```
 
-### Scenario A: Stateless Test (Sum)
+### Scenario 1: Stateless Test (Sum)
 By selecting option **1**, the client prompts the user to enter two values in order to execute the sum operation.
 
 ```text
@@ -132,7 +132,7 @@ By executing the sum operation again (still with A = 1 and B = 1), it can be obs
 
 Therefore, requests are alternately routed to Server A and Server B according to the Round-Robin strategy, while the computation remains local and isolated for each request.
 
-### Scenario B: Stateful Test (Multiplication)
+### Scenario 2: Stateful Test (Multiplication)
 By selecting option **2**, the user can enter a multiplication factor. The system maintains a Global Accumulator, initially set to 1.
 
 ```bash
@@ -157,7 +157,7 @@ By executing the multiplication again (still with Factor = 2), the request is ha
 
 This confirms that the accumulator state is shared and preserved across different servers through the external Key-Value Store.
 
-### Scenario C: Deregistration Verification (Shutdown)
+### Scenario 3: Deregistration Verification (Shutdown)
 To verify the automatic deregistration requirement:
 
 1. Go to the terminal of Server A and press **CTRL+C**

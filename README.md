@@ -164,15 +164,15 @@ To verify the automatic deregistration requirement:
 2. The server A logs:
 
 ```bash
-2026/01/21 15:43:43 [Server] Shutting down...
-2026/01/21 15:43:43 [Server] Successfully deregistered from Registry
+2026/01/17 20:20:18 [Server] Shutting down...
+2026/01/17 20:20:18 [Server] Successfully deregistered from Registry
 ```
 
 3. The service registry logs:
 
 ```bash
-2026/01/21 15:43:42 [Registry] Server registered: localhost:9001
-2026/01/21 15:43:43 [Registry] Server deregistered: localhost:9001
+2026/01/17 20:20:18 [Registry] Server registered: localhost:9001
+2026/01/17 20:20:18 [Registry] Server deregistered: localhost:9001
 ```
 This confirms that servers correctly deregister from the Service Registry upon shutdown.
 

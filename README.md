@@ -179,7 +179,3 @@ This confirms that servers correctly deregister from the Service Registry upon s
 4. In the Client, try to run an operation. Since the client caches the list, it might try to contact the dead server.
 
 5. The client will detect the error (connection refused), and you can proceed to the next request which will be routed to the remaining active server.
-
-
-
-
